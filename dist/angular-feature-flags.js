@@ -33,8 +33,8 @@ function featureFlagsProvider() {
 
     featureFlags.$inject = ['$q'];
 
-    function featureFlags($q, providedFlags) {
-        var flags = providedFlags || [];
+    function featureFlags($q) {
+        var flags = p.initialFlags;
 
         var service = {
             addFlag: addFlag,
