@@ -7,7 +7,7 @@ function featureFlagsProvider() {
     var p = this;
 
     p.init = init;
-    p.$get = featureFlags
+    p.$get = featureFlagsFactory
 
     ///////////////
 
