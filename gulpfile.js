@@ -5,7 +5,7 @@ var iife = require('gulp-iife');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
-SRC_FILES = ['feature-flags.module.js', 'feature-flags.provider.js', 'feature-flag.directive.js'];
+var SRC_FILES = ['src/feature-flags.module.js', 'src/feature-flags.provider.js', 'src/feature-flag.directive.js'];
 
 gulp.task('build', function () {
     return gulp.src(SRC_FILES)
