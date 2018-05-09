@@ -7,7 +7,11 @@ var uglify = require('gulp-uglify');
 
 var SRC_FILES = ['src/feature-flags.module.js', 'src/feature-flags.provider.js', 'src/feature-flag.directive.js'];
 
-gulp.task('build', function () {
+gulp.task('default', dev);
+gulp.task('build', build);
+gulp.task('dev', dev);
+
+function build() {
     return gulp.src(SRC_FILES)
         .pipe(plumber())
         .pipe(concat('angular-feature-flags.js'))
@@ -16,4 +20,8 @@ gulp.task('build', function () {
         .pipe(rename('angular-feature-flags.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/'));
-});
+}
+
+function dev() {
+    return gulp.watch('src/*.js', ['build']);
+}

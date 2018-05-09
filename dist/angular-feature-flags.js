@@ -13,7 +13,7 @@ function featureFlagsProvider() {
     var p = this;
 
     p.init = init;
-    p.$get = featureFlags
+    p.$get = getFactory
 
     ///////////////
 
@@ -27,9 +27,10 @@ function featureFlagsProvider() {
         }
     }
 
-    featureFlags.$inject = [initialFlags];
+    function getFactory() {
+        return featureFlag(initialFlags);
+    }
 
-    /* @ngInject */
     function featureFlags(providedFlags) {
         var flags = providedFlags || [];
 
