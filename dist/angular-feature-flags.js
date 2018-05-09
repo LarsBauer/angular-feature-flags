@@ -8,12 +8,14 @@ angular
     .module('feature-flags')
     .provider('featureFlags', featureFlagsProvider);
 
-function featureFlagsProvider() {
+featureFlagsProvider.$inject = ['$q'];
+
+function featureFlagsProvider($q) {
     var initialFlags = [];
     var p = this;
 
     p.init = init;
-    p.$get = getFactory
+    p.$get = featureFlags
 
     ///////////////
 
@@ -28,12 +30,10 @@ function featureFlagsProvider() {
     }
 
     function getFactory() {
-        return featureFlags(initialFlags);
+        return featureFlags();
     }
 
-    featureFlags.$inject = ['$q'];
-
-    function featureFlags($q) {
+    function featureFlags() {
         var flags = p.initialFlags;
 
         var service = {
