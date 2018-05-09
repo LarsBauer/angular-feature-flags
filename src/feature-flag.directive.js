@@ -1,35 +1,39 @@
-angular
-    .module('feature-flags')
-    .directive('featureFlag', featureFlag);
+(function () {
+    'use strict';
 
-featureFlag.$inject = ['featureFlags'];
+    angular
+        .module('feature-flags')
+        .directive('featureFlag', featureFlag);
 
-function featureFlag(featureFlags) {
-    // Usage:
-    // <div feature-flag feature-key="myFeature" invert></div>
-    // Creates:
-    //
-    var directive = {
-        link: link,
-        restrict: 'A',
-        scope: {
-            featureKey: '@',
-            invert: '@'
-        }
-    };
-    return directive;
+    featureFlag.$inject = ['featureFlags'];
 
-    function link(scope, element, attrs) {
-        determineVisibility();
+    function featureFlag(featureFlags) {
+        // Usage:
+        // <div feature-flag feature-key="myFeature" invert></div>
+        // Creates:
+        //
+        var directive = {
+            link: link,
+            restrict: 'A',
+            scope: {
+                featureKey: '@',
+                invert: '@'
+            }
+        };
+        return directive;
 
-        scope.$watchGroup(['featureKey', 'invert'],function (newVal, oldVal, scope) {
+        function link(scope, element, attrs) {
             determineVisibility();
-        });
 
-        function determineVisibility() {
-            var isVisible = featureFlags.getFlagStatus(scope.featureKey);
-            isVisible = scope.invert !== undefined ? !isVisible : isVisible;
-            isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+            scope.$watchGroup(['featureKey', 'invert'], function (newVal, oldVal, scope) {
+                determineVisibility();
+            });
+
+            function determineVisibility() {
+                var isVisible = featureFlags.getFlagStatus(scope.featureKey);
+                isVisible = scope.invert !== undefined ? !isVisible : isVisible;
+                isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+            }
         }
     }
-}
+})();

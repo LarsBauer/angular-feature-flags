@@ -1,3 +1,5 @@
-angular
-    .module('feature-flags', []);
-    
+(function () {
+    'use strict';
+
+    angular.module('feature-flags', []);
+})();

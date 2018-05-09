@@ -21,16 +21,17 @@ function build() {
     return gulp.src(SRC_FILES)
         .pipe(plumber())
         .pipe(concat('angular-feature-flags.js'))
-        .pipe(iife())
+        // .pipe(iife())
         .pipe(gulp.dest('dist/'))
         .pipe(rename('angular-feature-flags.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/'));
 }
 
-function doc(cb) {
-    return gulp.src(['README.md', 'src/*.js'], {
+function doc() {
+    // var config = require('./jsdocConfig');
+    gulp.src(['README.md', 'src/*.js'], {
             read: false
         })
-        .pipe(jsdoc(cb));
+        .pipe(jsdoc());
 }
