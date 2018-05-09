@@ -192,7 +192,7 @@ featureFlag.$inject = ['featureFlags'];
 
 function featureFlag(featureFlags) {
     // Usage:
-    // <div feature-key="myFeature" invert></div>
+    // <div feature-flag feature-key="myFeature" invert></div>
     // Creates:
     //
     var directive = {
