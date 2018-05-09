@@ -20,8 +20,16 @@ function featureFlag(featureFlags) {
     return directive;
 
     function link(scope, element, attrs) {
-        var isVisible = featureFlags.getFlagStatus(scope.featureKey);
-        isVisible = scope.invert !== undefined ? !isVisible : isVisible;
-        isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+        determineVisibility();
+
+        scope.$watchGroup(['featureKey', 'invert'],function (newVal, oldVal, scope) {
+            determineVisibility();
+        });
+
+        function determineVisibility() {
+            var isVisible = featureFlags.getFlagStatus(scope.featureKey);
+            isVisible = scope.invert !== undefined ? !isVisible : isVisible;
+            isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+        }
     }
 }

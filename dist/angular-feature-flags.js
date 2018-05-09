@@ -114,7 +114,6 @@ function featureFlagsProvider() {
 
             if (target && typeof newStatus === 'boolean') {
                 target.active = newStatus;
-                //TODO broadcast?
             }
         }
 
@@ -129,7 +128,6 @@ function featureFlagsProvider() {
 
             if (index !== -1) {
                 flags.splice(index, 1);
-                //TODO broadcast?
             }
         }
 
@@ -206,9 +204,17 @@ function featureFlag(featureFlags) {
     return directive;
 
     function link(scope, element, attrs) {
-        var isVisible = featureFlags.getFlagStatus(scope.featureKey);
-        isVisible = scope.invert !== undefined ? !isVisible : isVisible;
-        isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+        determineVisibility();
+
+        scope.$watchGroup(['featureKey', 'invert'],function (newVal, oldVal, scope) {
+            determineVisibility();
+        });
+
+        function determineVisibility() {
+            var isVisible = featureFlags.getFlagStatus(scope.featureKey);
+            isVisible = scope.invert !== undefined ? !isVisible : isVisible;
+            isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
+        }
     }
 }
 }());

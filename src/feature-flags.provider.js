@@ -108,7 +108,6 @@ function featureFlagsProvider() {
 
             if (target && typeof newStatus === 'boolean') {
                 target.active = newStatus;
-                //TODO broadcast?
             }
         }
 
@@ -123,7 +122,6 @@ function featureFlagsProvider() {
 
             if (index !== -1) {
                 flags.splice(index, 1);
-                //TODO broadcast?
             }
         }
 
