@@ -28,10 +28,12 @@ function featureFlagsProvider() {
     }
 
     function getFactory() {
-        return featureFlag(initialFlags);
+        return featureFlags(initialFlags);
     }
 
-    function featureFlags(providedFlags) {
+    featureFlags.$inject = ['$q'];
+
+    function featureFlags($q, providedFlags) {
         var flags = providedFlags || [];
 
         var service = {
