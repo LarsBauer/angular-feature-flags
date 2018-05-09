@@ -4,12 +4,18 @@ var concat = require('gulp-concat');
 var iife = require('gulp-iife');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var jsdoc = require('gulp-jsdoc3');
 
 var SRC_FILES = ['src/feature-flags.module.js', 'src/feature-flags.provider.js', 'src/feature-flag.directive.js'];
 
 gulp.task('default', dev);
 gulp.task('build', build);
 gulp.task('dev', dev);
+gulp.task('doc', doc);
+
+function dev() {
+    return gulp.watch('src/*.js', ['build']);
+}
 
 function build() {
     return gulp.src(SRC_FILES)
@@ -22,6 +28,9 @@ function build() {
         .pipe(gulp.dest('dist/'));
 }
 
-function dev() {
-    return gulp.watch('src/*.js', ['build']);
+function doc(cb) {
+    return gulp.src(['README.md', 'src/*.js'], {
+            read: false
+        })
+        .pipe(jsdoc(cb));
 }
