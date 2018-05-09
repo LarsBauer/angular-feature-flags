@@ -13,15 +13,15 @@ function featureFlag(featureFlags) {
         link: link,
         restrict: 'A',
         scope: {
-            featureKey: '=',
-            invert: '='
+            featureKey: '@',
+            invert: '@'
         }
     };
     return directive;
 
     function link(scope, element, attrs) {
         var isVisible = featureFlags.getFlagStatus(scope.featureKey);
-        scope.invert ? !isVisible : isVisible;
+        isVisible = scope.invert !== undefined ? !isVisible : isVisible;
         isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
     }
 }
