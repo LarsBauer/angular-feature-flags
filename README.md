@@ -59,12 +59,18 @@ function config($routeProvider, featureFlagsProvider) {
             templateUrl: 'myHiddenFeature.html',
             controller: 'MyController',
             resolve: {
-                /* @ngInject */
-                guardRoute: function(featureFlags) {
-                    return featureFlags.guardRoute(['myHiddenFeature']);
-                }
+                guardRoute: guardRoute(['myHiddenfeature'])
             }
         });
+}
+
+function guardRoute(requiredFeatures) {
+    /* @ngInject */
+    function onResolve(featureFlags) {
+        return featureFlags.guardRoute(requiredFeatures);
+    }
+
+    return onResolve;
 }
 ```
 ## API
