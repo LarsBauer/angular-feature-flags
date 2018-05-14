@@ -1,5 +1,5 @@
 /**
- * angular-feature-flags - 
+ * angular-feature-flags - A simple AngularJS module that provides a range of functionalities to control the visbility of components and the access to specific areas of your application via feature flags.
  * @version v1.0.0
  * @link https://github.com/LarsBauer/angular-feature-flags#readme
  * @license MIT
@@ -203,7 +203,7 @@
             restrict: 'A',
             scope: {
                 featureId: '@',
-                invert: '@'
+                invertFeatureFlag: '@'
             }
         };
         return directive;
@@ -211,13 +211,13 @@
         function link(scope, element, attrs) {
             determineVisibility();
 
-            scope.$watchGroup(['featureId', 'invert'], function (newVal, oldVal, scope) {
+            scope.$watchGroup(['featureId', 'invertFeatureFlag'], function (newVal, oldVal, scope) {
                 determineVisibility();
             });
 
             function determineVisibility() {
                 var isVisible = featureFlags.isActive(scope.featureKey);
-                isVisible = scope.invert !== undefined ? !isVisible : isVisible;
+                isVisible = scope.invertFeatureFlag !== undefined ? !isVisible : isVisible;
                 isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
             }
         }

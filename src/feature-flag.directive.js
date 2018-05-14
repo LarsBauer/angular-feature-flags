@@ -15,7 +15,7 @@
             restrict: 'A',
             scope: {
                 featureId: '@',
-                invert: '@'
+                invertFeatureFlag: '@'
             }
         };
         return directive;
@@ -23,13 +23,13 @@
         function link(scope, element, attrs) {
             determineVisibility();
 
-            scope.$watchGroup(['featureId', 'invert'], function (newVal, oldVal, scope) {
+            scope.$watchGroup(['featureId', 'invertFeatureFlag'], function (newVal, oldVal, scope) {
                 determineVisibility();
             });
 
             function determineVisibility() {
                 var isVisible = featureFlags.isActive(scope.featureKey);
-                isVisible = scope.invert !== undefined ? !isVisible : isVisible;
+                isVisible = scope.invertFeatureFlag !== undefined ? !isVisible : isVisible;
                 isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
             }
         }

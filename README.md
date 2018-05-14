@@ -35,9 +35,9 @@ To toggle the visibility of html elements just add the `feature-flag` directive 
     I will be hidden if 'myFeature' is inactive
 </div>
 ```
-You can invert the visibility by adding the `invert` attribute to the element.
+You can invert the visibility by adding the `invert-feature-flag` attribute to the element.
 ```html
-<div feature-flag feature-id="myFeature" invert>
+<div feature-flag feature-id="myFeature" invert-feature-flag>
     I will be hidden if 'myFeature' is active
 </div>
 ```
