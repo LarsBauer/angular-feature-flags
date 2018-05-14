@@ -20,7 +20,7 @@
          */
         function init(newFlags) {
             if (Array.isArray(newFlags)) {
-                initialFlags = newFlags
+                initialFlags = newFlags;
             }
         }
 
