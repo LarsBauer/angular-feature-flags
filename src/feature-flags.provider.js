@@ -46,8 +46,8 @@
             ////////////////
 
             function addFlag(newFlag) {
-                if (isValidFlag(flag)) {
-                    flags.push(flag);
+                if (isValidFlag(newFlag)) {
+                    flags.push(newFlag);
                 }
             }
 

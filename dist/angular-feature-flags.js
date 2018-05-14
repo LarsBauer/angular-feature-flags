@@ -1,3 +1,9 @@
+/**
+ * angular-feature-flags - 
+ * @version v1.0.0
+ * @link https://github.com/LarsBauer/angular-feature-flags#readme
+ * @license MIT
+ */
 (function () {
     'use strict';
 
@@ -51,8 +57,8 @@
             ////////////////
 
             function addFlag(newFlag) {
-                if (isValidFlag(flag)) {
-                    flags.push(flag);
+                if (isValidFlag(newFlag)) {
+                    flags.push(newFlag);
                 }
             }
 
@@ -140,7 +146,6 @@
         .directive('featureFlag', featureFlag);
 
     featureFlag.$inject = ['featureFlags'];
-
 
     function featureFlag(featureFlags) {
         // Usage:

@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var plumber = require('gulp-plumber');
 var concat = require('gulp-concat');
-var iife = require('gulp-iife');
+var header = require('gulp-header');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var jsdoc = require('gulp-jsdoc3');
@@ -18,10 +18,23 @@ function dev() {
 }
 
 function build() {
+    // using data from package.json
+    var pkg = require('./package.json');
+    var banner = ['/**',
+        ' * <%= pkg.name %> - <%= pkg.description %>',
+        ' * @version v<%= pkg.version %>',
+        ' * @link <%= pkg.homepage %>',
+        ' * @license <%= pkg.license %>',
+        ' */',
+        ''
+    ].join('\n');
+
     return gulp.src(SRC_FILES)
         .pipe(plumber())
         .pipe(concat('angular-feature-flags.js'))
-        // .pipe(iife())
+        .pipe(header(banner, {
+            pkg: pkg
+        }))
         .pipe(gulp.dest('dist/'))
         .pipe(rename('angular-feature-flags.min.js'))
         .pipe(uglify())
