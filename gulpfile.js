@@ -36,7 +36,9 @@ function build() {
         .pipe(header(banner, {
             pkg: pkg
         }))
-        .pipe(ngAnnotate())
+        .pipe(ngAnnotate({
+            single_quotes: true
+        }))
         .pipe(gulp.dest('dist/'))
         .pipe(rename('angular-feature-flags.min.js'))
         .pipe(uglify())

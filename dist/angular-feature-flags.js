@@ -17,7 +17,7 @@
         .provider('featureFlags', featureFlagsProvider);
 
     function featureFlagsProvider() {
-        featureFlagsFactory.$inject = ["$q"];
+        featureFlagsFactory.$inject = ['$q'];
         var initialFlags = [];
 
         var p = this;
@@ -188,7 +188,7 @@
 (function () {
     'use strict';
 
-    featureFlag.$inject = ["featureFlags"];
+    featureFlag.$inject = ['featureFlags'];
     angular
         .module('feature-flags')
         .directive('featureFlag', featureFlag);
