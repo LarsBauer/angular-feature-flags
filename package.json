@@ -1,7 +1,7 @@
 {
   "name": "angular-feature-flags",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple AngularJS module that provides a range of functionalities to control the visbility of components and the access to specific areas of your application via feature flags.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
