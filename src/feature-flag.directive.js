@@ -27,7 +27,7 @@
             });
 
             function determineVisibility() {
-                var isVisible = featureFlags.isActive(scope.featureKey);
+                var isVisible = featureFlags.isActive(scope.featureId);
                 isVisible = scope.invertFeatureFlag !== undefined ? !isVisible : isVisible;
                 isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
             }
