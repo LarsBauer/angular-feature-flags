@@ -196,8 +196,7 @@
     /* @ngInject */
     function featureFlag(featureFlags) {
         // Usage:
-        // <div feature-flag feature-id="myFeature" invert></div>
-        //
+        // <div feature-flag feature-id="myFeature" invert-feature-flag></div>
         var directive = {
             link: link,
             restrict: 'A',
