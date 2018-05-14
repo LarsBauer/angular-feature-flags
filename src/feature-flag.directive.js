@@ -9,14 +9,13 @@
 
     function featureFlag(featureFlags) {
         // Usage:
-        // <div feature-flag feature-key="myFeature" invert></div>
-        // Creates:
+        // <div feature-flag feature-id="myFeature" invert></div>
         //
         var directive = {
             link: link,
             restrict: 'A',
             scope: {
-                featureKey: '@',
+                featureId: '@',
                 invert: '@'
             }
         };
@@ -25,12 +24,12 @@
         function link(scope, element, attrs) {
             determineVisibility();
 
-            scope.$watchGroup(['featureKey', 'invert'], function (newVal, oldVal, scope) {
+            scope.$watchGroup(['featureId', 'invert'], function (newVal, oldVal, scope) {
                 determineVisibility();
             });
 
             function determineVisibility() {
-                var isVisible = featureFlags.getFlagStatus(scope.featureKey);
+                var isVisible = featureFlags.isActive(scope.featureKey);
                 isVisible = scope.invert !== undefined ? !isVisible : isVisible;
                 isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
             }

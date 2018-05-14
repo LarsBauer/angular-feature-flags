@@ -25,6 +25,10 @@
 
         ///////////////
 
+        /**
+         * @description initializes the featureFlagsProvider with the given array of feature flag objects
+         * @param {Array} newFlags the feature feature flag objects
+         */
         function init(newFlags) {
             if (Array.isArray(newFlags)) {
                 initialFlags = newFlags
@@ -41,79 +45,112 @@
             var flags = providedFlags;
 
             var service = {
-                addFlag: addFlag,
-                addFlags: addFlags,
                 getFlag: getFlag,
-                getAllFlags: getAllFlags,
-                getFlagStatus: getFlagStatus,
-                setFlagStatus: setFlagStatus,
-                removeFlag: removeFlag,
-                removeAllFlags: removeAllFlags,
-                resolveRoute: resolveRoute
+                getFlags: getFlags,
+                setFlag: setFlags,
+                setFlags: setFlags,
+                deleteFlag: deleteFlag,
+                deleteFlags: deleteFlags,
+                isActive: isActive,
+                guardRoute: guardRoute
             };
 
             return service;
 
             ////////////////
 
-            function addFlag(newFlag) {
-                if (isValidFlag(newFlag)) {
-                    flags.push(newFlag);
-                }
-            }
-
-            function addFlags(newFlags) {
-                if (Array.isArray(newFlags)) {
-                    newFlags.forEach(function (flag) {
-                        addFlag(flag);
-                    });
-                }
-            }
-
+            /**
+             * @description retrieves the given feature flag object
+             * @param {string} flagId the id of the feature flag
+             * @returns the feature flag object or undefined if no matching feature flag was found
+             */
             function getFlag(flagId) {
                 return flags.find(function (flag) {
                     return flag.id === flagId;
                 });
             }
 
-            function getAllFlags() {
+            /**
+             * @description retrieves all feature flag objects
+             * @returns {Array} the configured feature flags
+             */
+            function getFlags() {
                 return flags;
             }
 
-            function getFlagStatus(flagId) {
-                var target = getFlag(flagId);
+            /**
+             * @description sets the given feature flag object. 
+             * if a feature flag with this id already exists it will be updated, otherwise a new entry will be added to the list.
+             * @param {Object} newFlag the feature flag object
+             */
+            function setFlag(newFlag) {
+                if (isValidFlag(newFlag)) {
+                    var index = getFlagIndex(newFlag.id);
 
-                return target && target.active !== undefined ? target.active : false;
-            }
-
-            function setFlagStatus(flagId, newStatus) {
-                var target = getFlag(flagId);
-
-                if (target && typeof newStatus === 'boolean') {
-                    target.active = newStatus;
+                    if (index == -1) {
+                        // new flag
+                        flags.push(newFlag);
+                    } else {
+                        // update existing flag
+                        flags[index] = newFlag;
+                    }
                 }
             }
 
-            function removeFlag(flagId) {
-                var index = flags.indexOf(function (flag) {
-                    return flag.id === flagId;
-                });
+            /**
+             * @description sets a list of given feature flag objects.
+             * if a feature flag with this id already exists it will be updated, otherwise a new entry will be added to the list.
+             * @param {Array} newFlags the feature flag objects
+             */
+            function setFlags(newFlags) {
+                if (Array.isArray(newFlags)) {
+                    newFlags.forEach(function (flag) {
+                        setFlag(flag);
+                    });
+                }
+            }
+
+            /**
+             * @description deletes the given feature flag object
+             * @param {string} flagId the id of the feature flag to delete
+             */
+            function deleteFlag(flagId) {
+                var index = getFlagIndex(flagId);
 
                 if (index !== -1) {
                     flags.splice(index, 1);
                 }
             }
 
-            function removeAllFlags() {
+            /**
+             * @description deletes all feature flag objects
+             */
+            function deleteFlags() {
                 flags = [];
             }
 
-            function resolveRoute(flagIds) {
+            /**
+             * @description returns the status of the given feature flag
+             * @param {string} flagId the id of the feature flag
+             * @returns {boolean} the status of the provided feature flag 
+             * if the feature flag does not exist false will be returned.
+             */
+            function isActive(flagId) {
+                var flag = getFlag(flagId);
+
+                return flag && flag.active !== undefined ? flag.active : false;
+            }
+
+            /**
+             * @description checks whether all required feature flags of a route are active
+             * @param {Array} flagIds the ids of the feature flags required for the route
+             * @returns {Promise} a promise which gets resolved if all of the required feature flags for this route are active
+             */
+            function guardRoute(flagIds) {
                 return $q(function (resolve, reject) {
                     if (Array.isArray(flagIds)) {
                         for (var i = 0; i < flagIds.length; i++) {
-                            var isActive = getFlagStatus(flagIds[i]);
-                            if (!isActive) {
+                            if (!isActive(flagIds[i])) {
                                 // do not activate route
                                 reject();
                                 break;
@@ -126,14 +163,24 @@
                 });
             }
 
-            function isValidFlag(flag) {
-                return typeof flag.id === 'string' && typeof flag.active === 'boolean' && !isDuplicate(flag);
+            /**
+             * @description helper method used to get index of the given feature flag
+             * @param {string} flagId the id of the feature flag
+             * @returns {number} the index or -1 if no matching entry was found
+             */
+            function getFlagIndex(flagId) {
+                return flags.find(function (flag) {
+                    return flag.id === flagId;
+                });
             }
 
-            function isDuplicate(newFlag) {
-                return flags.find(function (flag) {
-                    return flag.id === newFlag.id;
-                }) !== undefined;
+            /**
+             * @description helper method used to validate a given feature flag object
+             * @param {Object} flag the feature flag object
+             * @returns {boolean} the validity of the feature flag object
+             */
+            function isValidFlag(flag) {
+                return typeof flag.id === 'string' && typeof flag.active === 'boolean';
             }
         }
     }
@@ -149,14 +196,13 @@
 
     function featureFlag(featureFlags) {
         // Usage:
-        // <div feature-flag feature-key="myFeature" invert></div>
-        // Creates:
+        // <div feature-flag feature-id="myFeature" invert></div>
         //
         var directive = {
             link: link,
             restrict: 'A',
             scope: {
-                featureKey: '@',
+                featureId: '@',
                 invert: '@'
             }
         };
@@ -165,12 +211,12 @@
         function link(scope, element, attrs) {
             determineVisibility();
 
-            scope.$watchGroup(['featureKey', 'invert'], function (newVal, oldVal, scope) {
+            scope.$watchGroup(['featureId', 'invert'], function (newVal, oldVal, scope) {
                 determineVisibility();
             });
 
             function determineVisibility() {
-                var isVisible = featureFlags.getFlagStatus(scope.featureKey);
+                var isVisible = featureFlags.isActive(scope.featureKey);
                 isVisible = scope.invert !== undefined ? !isVisible : isVisible;
                 isVisible ? element.removeClass('ng-hide') : element.addClass('ng-hide');
             }
