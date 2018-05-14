@@ -17,6 +17,7 @@
         .provider('featureFlags', featureFlagsProvider);
 
     function featureFlagsProvider() {
+        featureFlagsFactory.$inject = ["$q"];
         var initialFlags = [];
 
         var p = this;
@@ -35,8 +36,7 @@
             }
         }
 
-        featureFlagsFactory.$inject = ['$q'];
-
+        /* @ngInject */
         function featureFlagsFactory($q) {
             return featureFlags($q, initialFlags);
         }
@@ -188,12 +188,12 @@
 (function () {
     'use strict';
 
+    featureFlag.$inject = ["featureFlags"];
     angular
         .module('feature-flags')
         .directive('featureFlag', featureFlag);
 
-    featureFlag.$inject = ['featureFlags'];
-
+    /* @ngInject */
     function featureFlag(featureFlags) {
         // Usage:
         // <div feature-flag feature-id="myFeature" invert></div>

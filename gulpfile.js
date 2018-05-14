@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var plumber = require('gulp-plumber');
 var concat = require('gulp-concat');
 var header = require('gulp-header');
+var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var jsdoc = require('gulp-jsdoc3');
@@ -35,6 +36,7 @@ function build() {
         .pipe(header(banner, {
             pkg: pkg
         }))
+        .pipe(ngAnnotate())
         .pipe(gulp.dest('dist/'))
         .pipe(rename('angular-feature-flags.min.js'))
         .pipe(uglify())

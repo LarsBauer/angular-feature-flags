@@ -5,8 +5,7 @@
         .module('feature-flags')
         .directive('featureFlag', featureFlag);
 
-    featureFlag.$inject = ['featureFlags'];
-
+    /* @ngInject */
     function featureFlag(featureFlags) {
         // Usage:
         // <div feature-flag feature-id="myFeature" invert></div>

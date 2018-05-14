@@ -14,8 +14,7 @@ angular
     .module('app')
     .config(config);
 
-config.$inject = ['featureFlagsProvider'];
-
+/* @ngInject */
 function config(featureFlagsProvider) {
     var myFeatures = [
         { id: 'myFeature', active: true },
@@ -51,8 +50,7 @@ angular
     .module('app')
     .config(config);
 
-config.$inject = ['$routeProvider', 'featureFlagsProvider'];
-
+/* @ngInject */
 function config($routeProvider, featureFlagsProvider) {
     // featureFlagsProvider config goes here (see above for details)
 
@@ -61,15 +59,12 @@ function config($routeProvider, featureFlagsProvider) {
             templateUrl: 'myHiddenFeature.html',
             controller: 'MyController',
             resolve: {
-                guardRoute: guardRoute
+                /* @ngInject */
+                guardRoute: function(featureFlags) {
+                    return featureFlags.guardRoute(['myHiddenFeature']);
+                }
             }
         });
-}
-
-guardRoutes.$inject = ['featureFlags'];
-
-function guardRoute(featureFlags) {
-    return featureFlags.guardRoute(['myHiddenFeature']);
 }
 ```
 ## API

@@ -24,8 +24,7 @@
             }
         }
 
-        featureFlagsFactory.$inject = ['$q'];
-
+        /* @ngInject */
         function featureFlagsFactory($q) {
             return featureFlags($q, initialFlags);
         }
